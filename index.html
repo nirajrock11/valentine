@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @keyframes floatHearts {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-200px); opacity: 0; }
+    }
+
+    .heart {
+      position: absolute;
+      color: #ec4899;
+      font-size: 20px;
+      animation: floatHearts 3s linear forwards;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .pop {
+      animation: pop 0.4s ease;
+    }
+  </style>
+</head>
+
+<body class="bg-pink-100 flex items-center justify-center h-screen font-sans overflow-hidden">
+
+  <!-- Background music -->
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=romantic-ambient-11078.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="bg-white shadow-xl rounded-2xl p-10 text-center max-w-md relative">
+    <h1 class="text-2xl font-bold text-pink-600 mb-4">💖 Sweetheart, will you be my Valentine? 💖</h1>
+    <p class="text-gray-600 mb-6">This little surprise is made just for you ❤️</p>
+
+    <button onclick="startMusic()" class="mb-4 text-sm text-pink-500 underline">Play Music 🎵</button>
+
+    <div class="flex justify-center gap-4">
+      <button id="yesBtn" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-xl transition">
+        Yes 💕
+      </button>
+
+      <button id="noBtn" class="bg-gray-300 hover:bg-gray-400 text-black px-6 py-2 rounded-xl transition relative">
+        No
+      </button>
+    </div>
+
+    <p id="message" class="mt-6 text-lg font-semibold text-pink-600"></p>
+  </div>
+
+  <script>
+    let noClicks = 0;
+
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const message = document.getElementById("message");
+    const music = document.getElementById("bgMusic");
+
+    function startMusic() {
+      music.play();
+    }
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.top = "80%";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 3000);
+    }
+
+    yesBtn.addEventListener("click", () => {
+      message.textContent = "Yay Sweetheart!!! ❤️ I love you!";
+      yesBtn.classList.add("pop");
+
+      for (let i = 0; i < 20; i++) {
+        setTimeout(createHeart, i * 100);
+      }
+    });
+
+    noBtn.addEventListener("click", () => {
+      noClicks++;
+
+      if (noClicks === 1) {
+        message.textContent = "Are you sure Sweetheart? 🥺";
+        yesBtn.style.transform = "scale(1.2)";
+
+        noBtn.style.position = "absolute";
+        noBtn.style.left = Math.random() * 200 + "px";
+        noBtn.style.top = Math.random() * 100 + "px";
+
+      } else if (noClicks >= 2) {
+        message.textContent = "I'll take that as a YES! 💕";
+
+        for (let i = 0; i < 20; i++) {
+          setTimeout(createHeart, i * 100);
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
