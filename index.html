@@ -9,31 +9,55 @@
   <style>
     body {
       background: linear-gradient(135deg, #ffd1dc, #ffe4ec);
+      overflow: hidden;
     }
 
     .card {
       backdrop-filter: blur(10px);
+      z-index: 2;
+    }
+
+    /* Floating hearts background */
+    .bg-heart {
+      position: absolute;
+      color: #ff85a2;
+      font-size: 18px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.4;
     }
 
     @keyframes floatUp {
-      from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(-200px); opacity: 0; }
+      from { transform: translateY(100vh); }
+      to { transform: translateY(-10vh); }
     }
 
-    .heart {
+    /* Watermark background text */
+    .bg-text {
       position: absolute;
-      color: #ff4d6d;
-      font-size: 22px;
-      animation: floatUp 2.5s linear forwards;
+      font-size: 40px;
+      color: rgba(255, 105, 135, 0.15);
+      transform: rotate(-20deg);
+      white-space: nowrap;
+      z-index: 1;
+      user-select: none;
     }
   </style>
 </head>
 
-<body class="flex items-center justify-center h-screen font-sans overflow-hidden">
+<body class="flex items-center justify-center h-screen font-sans">
 
+  <!-- Romantic background music -->
+  <!-- Romantic background music -->
   <audio id="bgMusic" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=romantic-ambient-11078.mp3" type="audio/mpeg">
+    <source src="butterfly_wings-oh-valentine-482952.mp3" type="audio/mpeg">
   </audio>
+
+  <!-- Background watermark text -->
+  <div class="bg-text" style="top:20%; left:10%;">#nirjutogetherforever</div>
+  <div class="bg-text" style="top:60%; left:40%;">#nirjutogtherforever</div>
+
+  <!-- Floating hearts container -->
+  <div id="hearts"></div>
 
   <div class="card bg-white/80 shadow-2xl rounded-2xl p-8 text-center max-w-md relative">
 
@@ -89,25 +113,8 @@
         questionEl.textContent = questions[index];
       } else {
         questionEl.textContent = "You completed the love game! 💕";
-        document.getElementById("finalMessage").classList.remove("hidden");
         scoreEl.textContent = "Love Score: " + loveScore + "/5 ❤️";
-        celebrate();
-      }
-    }
-
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.innerHTML = "❤";
-      heart.style.left = Math.random() * window.innerWidth + "px";
-      heart.style.top = "80%";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 2500);
-    }
-
-    function celebrate() {
-      for (let i = 0; i < 25; i++) {
-        setTimeout(createHeart, i * 80);
+        document.getElementById("finalMessage").classList.remove("hidden");
       }
     }
 
@@ -123,6 +130,20 @@
         questionEl.textContent = "Hmm... wrong answer 😄 Try YES!";
       }
     });
+
+    // Generate floating hearts in background
+    function spawnHeart() {
+      const heart = document.createElement("div");
+      heart.className = "bg-heart";
+      heart.innerHTML = "❤";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 8000);
+    }
+
+    setInterval(spawnHeart, 600);
   </script>
 
 </body>
