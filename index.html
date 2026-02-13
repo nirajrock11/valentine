@@ -1,151 +1,158 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Valentine Love Game 💖</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<!-- Keep the rest of your HTML the same -->
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #ffd1dc, #ffe4ec);
-      overflow: hidden;
+<script>
+  // Game logic
+  const questions = [
+    "Do you love me? ❤️",
+    "Are you my favorite person? 🥰",
+    "Do you enjoy our memories together? ✨",
+    "Will you go on dates with me forever? 🌹",
+    "Will you be my Valentine? 💖"
+  ];
+
+  let index = -1;
+  let loveScore = 0;
+
+  const questionEl = document.getElementById("question");
+  const scoreEl = document.getElementById("score");
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const music = document.getElementById("bgMusic");
+
+  function startGame() {
+    music.play();
+    nextQuestion();
+  }
+
+  function nextQuestion() {
+    index++;
+    if (index < questions.length) {
+      questionEl.textContent = questions[index];
+    } else {
+      questionEl.textContent = "You completed the love game! 💕";
+      scoreEl.textContent = "Love Score: " + loveScore + "/5 ❤️";
+      document.getElementById("finalMessage").classList.remove("hidden");
+      startCelebration();
     }
+  }
 
-    .card {
-      backdrop-filter: blur(10px);
-      z-index: 2;
-    }
-
-    /* Floating hearts background */
-    .bg-heart {
-      position: absolute;
-      color: #ff85a2;
-      font-size: 18px;
-      animation: floatUp 6s linear infinite;
-      opacity: 0.4;
-    }
-
-    @keyframes floatUp {
-      from { transform: translateY(100vh); }
-      to { transform: translateY(-10vh); }
-    }
-
-    /* Watermark background text */
-    .bg-text {
-      position: absolute;
-      font-size: 40px;
-      color: rgba(255, 105, 135, 0.15);
-      transform: rotate(-20deg);
-      white-space: nowrap;
-      z-index: 1;
-      user-select: none;
-    }
-  </style>
-</head>
-
-<body class="flex items-center justify-center h-screen font-sans">
-
-  <!-- Romantic background music -->
-  <!-- Romantic background music -->
-  <audio id="bgMusic" loop>
-    <source src="butterfly_wings-oh-valentine-482952.mp3" type="audio/mpeg">
-  </audio>
-
-  <!-- Background watermark text -->
-  <div class="bg-text" style="top:20%; left:10%;">#nirjutogetherforever</div>
-  <div class="bg-text" style="top:60%; left:40%;">#nirjutogtherforever</div>
-  <div class="bg-text" style="top:60%; left:40%;">#nirjutogtherforever</div>
-
-  <!-- Floating hearts container -->
-  <div id="hearts"></div>
-
-  <div class="card bg-white/80 shadow-2xl rounded-2xl p-8 text-center max-w-md relative">
-
-    <!-- Photos -->
-    <div class="flex justify-center gap-4 mb-4">
-      <img src="mine.jpeg" class="w-20 h-20 object-cover rounded-full border-4 border-pink-400">
-      <img src="sweetheart.jpeg" class="w-20 h-20 object-cover rounded-full border-4 border-pink-400">
-    </div>
-
-    <h1 class="text-xl font-bold text-pink-600 mb-2">Sweetheart Love Game 💕</h1>
-    <p id="question" class="text-gray-700 mb-6">Press start to play</p>
-
-    <button onclick="startGame()" class="bg-pink-500 text-white px-4 py-2 rounded-xl mb-3">Start Game</button>
-
-    <div class="flex justify-center gap-4">
-      <button id="yesBtn" class="bg-green-500 text-white px-5 py-2 rounded-xl">Yes</button>
-      <button id="noBtn" class="bg-gray-300 px-5 py-2 rounded-xl">No</button>
-    </div>
-
-    <p id="score" class="mt-4 text-pink-600 font-semibold"></p>
-
-    <div id="finalMessage" class="hidden mt-4 text-lg font-bold text-pink-700">
-      I love you Sweetheart ❤️ — Niraj
-    </div>
-  </div>
-
-  <script>
-    const questions = [
-      "Do you love me? ❤️",
-      "Are you my favorite person? 🥰",
-      "Do you enjoy our memories together? ✨",
-      "Will you go on dates with me forever? 🌹",
-      "Will you be my Valentine? 💖"
-    ];
-
-    let index = -1;
-    let loveScore = 0;
-
-    const questionEl = document.getElementById("question");
-    const scoreEl = document.getElementById("score");
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const music = document.getElementById("bgMusic");
-
-    function startGame() {
-      music.play();
+  yesBtn.addEventListener("click", () => {
+    if (index >= 0 && index < questions.length) {
+      loveScore++;
       nextQuestion();
     }
+  });
 
-    function nextQuestion() {
-      index++;
-      if (index < questions.length) {
-        questionEl.textContent = questions[index];
+  noBtn.addEventListener("click", () => {
+    if (index >= 0 && index < questions.length) {
+      questionEl.textContent = "Hmm... wrong answer 😄 Try YES!";
+    }
+  });
+
+  // Floating hearts in wavy paths
+  function spawnHeart() {
+    const heart = document.createElement("div");
+    heart.className = "bg-heart";
+    heart.innerHTML = "❤";
+
+    const startX = Math.random() * window.innerWidth;
+    const startY = window.innerHeight + 20; // start below the screen
+    const amplitude = 50 + Math.random() * 100; // wave width
+    const frequency = 0.01 + Math.random() * 0.02; // wave speed
+    const speed = 1 + Math.random() * 2; // vertical speed
+    const size = 10 + Math.random() * 30;
+    const color = `hsl(${Math.random() * 360}, 80%, 70%)`;
+    const opacity = 0.3 + Math.random() * 0.7;
+    let angle = Math.random() * 2 * Math.PI;
+
+    heart.style.fontSize = size + "px";
+    heart.style.color = color;
+    heart.style.opacity = opacity;
+    heart.style.left = startX + "px";
+    heart.style.top = startY + "px";
+
+    document.body.appendChild(heart);
+
+    function animate() {
+      angle += frequency * 20;
+      startY -= speed;
+      const x = startX + Math.sin(angle) * amplitude;
+      const y = startY;
+      heart.style.transform = `translate(${x - startX}px, ${y - startY}px) rotate(${angle*10}deg)`;
+
+      if (y > -50) {
+        requestAnimationFrame(animate);
       } else {
-        questionEl.textContent = "You completed the love game! 💕";
-        scoreEl.textContent = "Love Score: " + loveScore + "/5 ❤️";
-        document.getElementById("finalMessage").classList.remove("hidden");
+        heart.remove();
       }
     }
 
-    yesBtn.addEventListener("click", () => {
-      if (index >= 0 && index < questions.length) {
-        loveScore++;
-        nextQuestion();
-      }
-    });
+    requestAnimationFrame(animate);
+  }
 
-    noBtn.addEventListener("click", () => {
-      if (index >= 0 && index < questions.length) {
-        questionEl.textContent = "Hmm... wrong answer 😄 Try YES!";
-      }
-    });
+  // Spawn hearts continuously
+  setInterval(spawnHeart, 150);
 
-    // Generate floating hearts in background
-    function spawnHeart() {
+  // Celebration after final round
+  function startCelebration() {
+    // Show a big congratulation text
+    const confettiText = document.createElement("div");
+    confettiText.textContent = "🎉 Congratulations! ❤️ 🎉";
+    confettiText.style.position = "fixed";
+    confettiText.style.top = "40%";
+    confettiText.style.left = "50%";
+    confettiText.style.transform = "translate(-50%, -50%)";
+    confettiText.style.fontSize = "3rem";
+    confettiText.style.color = "#ff3366";
+    confettiText.style.zIndex = 1000;
+    confettiText.style.textAlign = "center";
+    confettiText.style.opacity = 0;
+    confettiText.style.transition = "opacity 1s ease-in-out";
+    document.body.appendChild(confettiText);
+
+    setTimeout(() => { confettiText.style.opacity = 1; }, 100);
+    setTimeout(() => { confettiText.style.opacity = 0; confettiText.remove(); }, 5000);
+
+    // Spawn more hearts from center
+    const celebrationInterval = setInterval(() => {
       const heart = document.createElement("div");
       heart.className = "bg-heart";
       heart.innerHTML = "❤";
-      heart.style.left = Math.random() * window.innerWidth + "px";
-      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+
+      const size = 20 + Math.random() * 40;
+      const color = `hsl(${Math.random() * 360}, 80%, 70%)`;
+      const opacity = 0.6 + Math.random() * 0.4;
+
+      heart.style.fontSize = size + "px";
+      heart.style.color = color;
+      heart.style.opacity = opacity;
+      heart.style.left = window.innerWidth / 2 + (Math.random() - 0.5) * 100 + "px";
+      heart.style.top = window.innerHeight / 2 + (Math.random() - 0.5) * 50 + "px";
+
       document.body.appendChild(heart);
 
-      setTimeout(() => heart.remove(), 8000);
-    }
+      let angle = Math.random() * 2 * Math.PI;
+      const amplitude = 30 + Math.random() * 50;
+      const speed = 2 + Math.random() * 3;
 
-    setInterval(spawnHeart, 600);
-  </script>
+      function animate() {
+        angle += 0.05;
+        const x = (window.innerWidth / 2) + Math.sin(angle) * amplitude + (Math.random()-0.5)*10;
+        const y = parseFloat(heart.style.top) - speed;
+        heart.style.transform = `translate(${x - window.innerWidth/2}px, ${-speed}px) rotate(${angle*10}deg)`;
+        heart.style.top = y + "px";
 
-</body>
-</html>
+        if (y > -50) {
+          requestAnimationFrame(animate);
+        } else {
+          heart.remove();
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }, 100);
+
+    // Stop celebration after 10 seconds
+    setTimeout(() => clearInterval(celebrationInterval), 10000);
+  }
+</script>
