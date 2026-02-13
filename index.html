@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Love Game 💖</title>
+  <title>Valentine Love Game 💖</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -20,9 +20,15 @@
     /* Floating hearts background */
     .bg-heart {
       position: absolute;
-      pointer-events: none;
-      user-select: none;
-      font-weight: bold;
+      color: #ff85a2;
+      font-size: 18px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.4;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh); }
+      to { transform: translateY(-10vh); }
     }
 
     /* Watermark background text */
@@ -41,16 +47,15 @@
 <body class="flex items-center justify-center h-screen font-sans">
 
   <!-- Romantic background music -->
+  <!-- Romantic background music -->
   <audio id="bgMusic" loop>
     <source src="butterfly_wings-oh-valentine-482952.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Background watermark text -->
-  <div class="bg-text" style="top:10%; left:5%;">#nirjuforevertogether</div>
-  <div class="bg-text" style="top:30%; left:60%;">#nirjuforevertogether</div>
-  <div class="bg-text" style="top:50%; left:20%;">#nirjutogetherforever</div>
-  <div class="bg-text" style="top:70%; left:50%;">#nirjutogetherforever</div>
-  <div class="bg-text" style="top:80%; left:10%;">#nirjutogetherforever</div>
+  <div class="bg-text" style="top:20%; left:10%;">#nirjutogetherforever</div>
+  <div class="bg-text" style="top:60%; left:40%;">#nirjutogtherforever</div>
+  <div class="bg-text" style="top:60%; left:40%;">#nirjutogtherforever</div>
 
   <!-- Floating hearts container -->
   <div id="hearts"></div>
@@ -81,7 +86,6 @@
   </div>
 
   <script>
-    // Game logic
     const questions = [
       "Do you love me? ❤️",
       "Are you my favorite person? 🥰",
@@ -128,49 +132,19 @@
       }
     });
 
-    // Floating hearts in wavy paths
+    // Generate floating hearts in background
     function spawnHeart() {
       const heart = document.createElement("div");
       heart.className = "bg-heart";
       heart.innerHTML = "❤";
-
-      const startX = Math.random() * window.innerWidth;
-      const startY = window.innerHeight + 20; // start below the screen
-      const amplitude = 50 + Math.random() * 100; // wave width
-      const frequency = 0.01 + Math.random() * 0.02; // wave speed
-      const speed = 1 + Math.random() * 2; // vertical speed
-      const size = 10 + Math.random() * 30;
-      const color = `hsl(${Math.random() * 360}, 80%, 70%)`;
-      const opacity = 0.3 + Math.random() * 0.7;
-      let angle = Math.random() * 2 * Math.PI;
-
-      heart.style.fontSize = size + "px";
-      heart.style.color = color;
-      heart.style.opacity = opacity;
-      heart.style.left = startX + "px";
-      heart.style.top = startY + "px";
-
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
       document.body.appendChild(heart);
 
-      function animate() {
-        angle += frequency * 20;
-        startY -= speed;
-        const x = startX + Math.sin(angle) * amplitude;
-        const y = startY;
-        heart.style.transform = `translate(${x - startX}px, ${y - startY}px) rotate(${angle*10}deg)`;
-
-        if (y > -50) {
-          requestAnimationFrame(animate);
-        } else {
-          heart.remove();
-        }
-      }
-
-      requestAnimationFrame(animate);
+      setTimeout(() => heart.remove(), 8000);
     }
 
-    // Spawn hearts continuously
-    setInterval(spawnHeart, 150);
+    setInterval(spawnHeart, 600);
   </script>
 
 </body>
